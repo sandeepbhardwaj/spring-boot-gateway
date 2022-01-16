@@ -1,0 +1,45 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      httpclient:
+        connect-timeout: 45
+        response-timeout: 5s
+      routes:
+        - id: employee-service
+          uri: http://localhost:8085
+          predicates:
+            - Path=/api/**
+            - Weight=group1, 5
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+          metadata:
+            # must be in milliseconds
+            connect-timeout: 45
+            #response-timeout: 2000
+        - id: employee-service1
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/**
+            - Weight=group1, 5
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+          metadata:
+            # must be in milliseconds
+            connect-timeout: 45
+            #response-timeout: 2000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    root: info
+
