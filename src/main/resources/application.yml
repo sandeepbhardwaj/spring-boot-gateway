@@ -18,9 +18,7 @@ spring:
           filters:
             - RewritePath=/api/(?<segment>.*), /$\{segment}
           metadata:
-            # must be in milliseconds
-            connect-timeout: 45
-            #response-timeout: 2000
+            response-timeout: 2000
         - id: employee-service1
           uri: http://localhost:8086
           predicates:
@@ -28,10 +26,6 @@ spring:
             - Weight=group1, 5
           filters:
             - RewritePath=/api/(?<segment>.*), /$\{segment}
-          metadata:
-            # must be in milliseconds
-            connect-timeout: 45
-            #response-timeout: 2000
 
 management:
   endpoints:
